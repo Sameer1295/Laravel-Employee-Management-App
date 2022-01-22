@@ -7,7 +7,14 @@
                 <p>{{ $message }}</p>
             </div>
         @endif
-            <table class="table">
+        <div class="row my-2">
+            <h2 class="col-md-6">All Employees</h2>
+            <form action="{{route('employee_export')}}" class="col-md-6" action="post">
+                <button type="submit"class="btn btn-primary">export</button>
+            </form>
+        </div>
+        <div class="row">
+        <table class="table">
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">#</th>
@@ -37,10 +44,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <form action="{{route('employee_export')}}" action="post">
-            <button type="submit"class="btn btn-primary">export</button>
-            </form>
-            
+        </div>
     @else
         <div class="alert alert-danger">No employees found.</div>
     @endif
