@@ -160,7 +160,7 @@ class EmployeeController extends Controller
     {
         $employees = Employee::all();
         
-        return $employees;
+        return $employees;  
     }
     public function emps(){
         $employees = Employee::find(2);
@@ -170,7 +170,33 @@ class EmployeeController extends Controller
 
     public function export() 
     {
-        return Excel::download(new EmployeesExport, 'employees.xlsx');
+        $data = Employee::get()->all();
+        $headers = [
+            'Id',
+            'Name',
+            'Gender',
+            'Designation',
+            'Marital Status',
+            'Education',
+            'Email',
+            'Mobile Number',
+            'Present Address',
+            'Permanent Address',
+            'Date of Birth',
+            'Mother name',
+            'Father name',
+            'UAN number',
+            'ESIC number',
+            'Adhaar number',
+            'Pan number',
+            'Blood group',
+            'Body mark',
+            'Bank name',
+            'Branch name',
+            'Account number',
+            'IFSC'
+        ];
+        return Excel::download(new EmployeesExport($data,$headers), 'employees.xlsx');
 
     }
 }

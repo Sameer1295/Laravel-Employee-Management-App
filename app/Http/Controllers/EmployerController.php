@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employer;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\EmployersExport;
+use App\Exports\EmployeesExport;
 
 class EmployerController extends Controller
 {
@@ -132,7 +132,17 @@ class EmployerController extends Controller
     }
     public function export() 
     {
-        return Excel::download(new EmployersExport, 'employers.xlsx');
+        $data = Employer::all(['id','name','mobile_number','address','pf_number','esic_number','gst_number'])->toArray();
+        $headers = [
+            'Id',
+            'Name',
+            'Mobile number',
+            'Address',
+            'PF number',
+            'Esic number',
+            'Gst number'
+        ];
+        return Excel::download(new EmployeesExport($data,$headers), 'employers.xlsx');
 
     }
 }

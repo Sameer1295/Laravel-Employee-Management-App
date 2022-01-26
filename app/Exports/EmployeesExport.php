@@ -4,12 +4,24 @@ namespace App\Exports;
 
 use App\Models\Employee;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithStyles;
 
-class EmployeesExport implements FromQuery, WithMapping
+class EmployeesExport implements FromArray, WithHeadings, WithStyles
 {
+    protected $headers;
+    protected $data;
+    public function __construct(array $data,array $headers)
+    {
+        $this->headers = $headers;
+        $this->data = $data;
+    }
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -19,64 +31,21 @@ class EmployeesExport implements FromQuery, WithMapping
     // }
     use Exportable;
 
-    public function query()
+    public function array(): array
     {
-        //take care of gender column as it is boolean
-        return Employee::query();
+        return $this->data;
     }
-    public function map($employee): array
+
+    public function headings(): array
+    {
+        return $this->headers;
+    }
+    
+    public function styles(Worksheet $sheet)
     {
         return [
-            $employee->name,
-            $employee->gender,
-            $employee->designation,
-            $employee->education,
-            $employee->email,
-            $employee->mobile_number,
-            $employee->present_address,
-            $employee->permanent_address,
-            $employee->date_of_birth,
-            $employee->mother_name,
-            $employee->father_name,
-            $employee->uan_number,
-            $employee->esic_number,
-            $employee->adhaar_number,
-            $employee->pan_number,
-            $employee->blood_group,
-            $employee->body_mark,
-            $employee->bank_name,
-            $employee->branch_name,
-            $employee->account_number,
-            $employee->ifsc_code,
+            // Style the first row as bold text.
+            1    => ['font' => ['bold' => true]],
         ];
     }
-    // public function headings(): array
-    // {
-    //     return [
-    //         'id',
-    //         'name',
-    //         'gender',
-    //         'designation',
-    //         'education',
-    //         'email',
-    //         'mobile_number',
-    //         'present_address',
-    //         'permanent_address',
-    //         'date_of_birth',
-    //         'mother_name',
-    //         'father_name',
-    //         'uan_number',
-    //         'esic_number',
-    //         'adhaar_number',
-    //         'pan_number',
-    //         'blood_group',
-    //         'body_mark',
-    //         'bank_name',
-    //         'branch_name',
-    //         'account_number',
-    //         'ifsc_code'
-    //     ];
-    // }
-    
-
 }

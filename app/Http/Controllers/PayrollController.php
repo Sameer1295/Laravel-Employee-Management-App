@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\PayrollsExport;
+use App\Exports\EmployeesExport;
 
 class PayrollController extends Controller
 {
@@ -142,7 +142,20 @@ class PayrollController extends Controller
     }
     public function export() 
     {
-        return Excel::download(new PayrollsExport, 'payrolls.xlsx');
+        $data = Payroll::all([
+            'employee_id',
+            'employer_id',
+            'joining_date',
+            'leaving_date'
+        ])->toArray();
+        
+        $headers = [
+            'Employee',
+            'Employer',
+            'Joining date',
+            'Leaving_ date'
+        ];
+        return Excel::download(new EmployeesExport($data,$headers), 'payrolls.xlsx');
 
     }
 }
